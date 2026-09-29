@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-label="Photo placeholder">
+  <rect width="400" height="500" fill="#f4efe6"/>
+  <circle cx="200" cy="190" r="62" fill="none" stroke="#111" stroke-width="2"/>
+  <path d="M80 400 C80 320 140 290 200 290 C260 290 320 320 320 400" fill="none" stroke="#111" stroke-width="2"/>
+  <text x="200" y="450" text-anchor="middle" font-family="Courier New, Courier, monospace" font-size="16" fill="#111">photo goes here</text>
+</svg>
