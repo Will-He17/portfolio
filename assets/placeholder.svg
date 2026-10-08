@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <!-- Shared placeholder for case study slides. Transparent, so the frame tint shows through. -->
+  <g fill="none" stroke="#111" stroke-width="2" opacity="0.35">
+    <line x1="0" y1="0" x2="1600" y2="900"/>
+    <line x1="1600" y1="0" x2="0" y2="900"/>
+    <rect x="40" y="40" width="1520" height="820"/>
+  </g>
+</svg>
