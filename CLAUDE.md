@@ -6,7 +6,7 @@ Personal portfolio for William He (goes by Will). Static site: plain HTML, CSS, 
 
 - `index.html`, `about.html`, `projects.html`, `experience.html`
 - `css/style.css`: one file, color and font variables at the top
-- `js/scramble.js`: Enigma-style cipher columns on the left and right edges (hidden below 960px, static under prefers-reduced-motion)
+- `js/scramble.js`: Enigma-style cipher columns on the left and right edges (shimmer plus perpetual downward scroll; hidden below 960px, static under prefers-reduced-motion; ROW_HEIGHT must match the 21px row height in the CSS)
 - `assets/willhe.jpg`: portrait on the About page; `assets/photo-placeholder.svg` is unused
 - `README.md`: how to run, edit, and deploy
 
