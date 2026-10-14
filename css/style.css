@@ -44,7 +44,7 @@ a {
 
 /* Visible keyboard focus everywhere */
 a:focus-visible,
-summary:focus-visible {
+button:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 4px;
 }
@@ -69,7 +69,11 @@ summary:focus-visible {
   position: fixed;
   top: 0;
   bottom: 0;
-  width: 92px;
+  /* Exactly two whole five-letter groups, so clipping happens between
+     groups and never mid-letter. Per group: 5 letters * (0.6em advance +
+     0.12em letter-spacing) = 3.6em, plus 0.9em gap, times two = 9em.
+     The extra 0.2em is rounding slack. */
+  width: 9.2em;
   overflow: hidden;
   pointer-events: none;
   user-select: none;
@@ -269,48 +273,51 @@ h3 {
 /* ---------- Projects ---------- */
 
 .project {
+  padding: 1.75rem 0 2rem;
   border-top: 1px solid var(--ink);
 }
 .project:last-of-type {
   border-bottom: 1px solid var(--ink);
 }
-
-.project summary {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6em;
-  padding: 1.25rem 0;
-  cursor: pointer;
-  list-style: none; /* hide default marker */
-  font-family: var(--font-serif);
-  font-style: italic;
+.project-title {
+  margin: 0 0 0.6rem;
   font-size: clamp(2rem, 6vw, 3rem);
   line-height: 1.1;
-}
-.project summary::-webkit-details-marker {
-  display: none;
-}
-.project summary::before {
-  content: '>';
-  font-family: var(--font-mono);
-  font-style: normal;
-  font-size: 0.5em;
-  flex: none;
-  width: 1.2em;
-}
-.project[open] summary::before {
-  content: 'v';
-}
-
-.project-body {
-  padding: 0 0 2rem 2.4rem;
 }
 .project-subtitle {
   margin: 0 0 0.25rem;
   font-weight: 700;
 }
 .project-badge {
-  margin: 0 0 1rem;
+  margin: 0;
+}
+
+/* ---------- List page links (experience and projects) ---------- */
+
+.entry h2 a,
+.project-title a {
+  text-decoration: none;
+}
+.entry h2 a:hover,
+.entry h2 a:focus-visible,
+.project-title a:hover,
+.project-title a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+}
+
+.entry-more {
+  margin: 1.25rem 0 0;
+  font-size: 0.9rem;
+}
+.entry-more a {
+  text-decoration: none;
+}
+.entry-more a:hover,
+.entry-more a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 /* ---------- Bullets (projects and experience) ---------- */
@@ -361,6 +368,398 @@ h3 {
 .education p {
   margin: 0;
   font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   Subpages: case studies under /experience and /projects
+   Built from _template.html. Wider container than the list pages, a media
+   carousel, and a two column case study block with a sticky sidebar.
+   ========================================================================== */
+
+:root {
+  --content-width-wide: 960px;
+  /* A slightly darker paper tint for media frames */
+  --paper-deep: #ebe6dc;
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+  :root {
+    --paper-deep: color-mix(in srgb, var(--paper) 92%, var(--ink));
+  }
+}
+
+/* Shared rules for [hidden] so display rules below cannot override it */
+.carousel [hidden] {
+  display: none !important;
+}
+
+/* Container: 960px max. Once the cipher columns appear (960px and up) the
+   container leaves 8.5rem on each side, which clears the columns
+   (9.2em * 11px = 101px, plus their 14px offset). */
+.page--sub {
+  max-width: calc(var(--content-width-wide) + 3rem);
+}
+@media (min-width: 960px) {
+  .page--sub {
+    max-width: none;
+    width: min(calc(var(--content-width-wide) + 3rem), calc(100% - 17rem));
+  }
+}
+.page--sub .site-nav {
+  margin-bottom: 2.5rem;
+}
+
+/* ---------- Header ---------- */
+
+.back-link {
+  margin: 0 0 1.75rem;
+  font-size: 0.9rem;
+}
+.back-link a,
+.sub-footer a,
+.sub-links a {
+  text-decoration: none;
+}
+.back-link a:hover,
+.back-link a:focus-visible,
+.sub-footer a:hover,
+.sub-footer a:focus-visible,
+.sub-links a:hover,
+.sub-links a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+.sub-title {
+  margin: 0 0 0.9rem;
+  font-size: clamp(2.5rem, 8vw, 4.25rem);
+  text-transform: none; /* proper titles keep their capitals */
+  overflow-wrap: break-word;
+}
+.sub-meta,
+.sub-badge {
+  margin: 0 0 0.2rem;
+  font-size: 0.9rem;
+}
+.sub-summary {
+  max-width: 34em;
+  margin: 1.5rem 0 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.35rem, 3.2vw, 1.8rem);
+  line-height: 1.3;
+}
+.sub-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.75rem;
+  margin: 1.25rem 0 0;
+  font-size: 0.9rem;
+}
+
+/* ---------- Media carousel ---------- */
+
+.carousel {
+  margin: 2.5rem 0 0;
+}
+.carousel-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: var(--paper-deep);
+}
+.carousel-track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.carousel-track:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -6px;
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.slide > img,
+.slide > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* letterbox, never crop */
+}
+/* Captions are read out by JS into .carousel-caption below the frame.
+   They stay in the DOM for assistive tech. */
+.slide figcaption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.slide.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.placeholder-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.placeholder-text {
+  position: relative;
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+  background: var(--paper-deep);
+  border: 1px solid var(--ink);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  max-width: calc(100% - 7rem); /* never runs under the arrow buttons */
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+.carousel-btn--prev {
+  left: 0.75rem;
+}
+.carousel-btn--next {
+  right: 0.75rem;
+}
+.carousel-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.carousel-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.carousel-btn[aria-disabled='true'] {
+  opacity: 0.35;
+  cursor: default;
+}
+.carousel-btn[aria-disabled='true']:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.carousel-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+}
+.carousel-caption {
+  flex: 1;
+  min-width: 0;
+  min-height: 1.7em; /* keeps the layout still when captions come and go */
+  margin: 0;
+}
+.carousel-counter {
+  margin: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 479px) {
+  .carousel-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .carousel-btn--prev {
+    left: 0.5rem;
+  }
+  .carousel-btn--next {
+    right: 0.5rem;
+  }
+  .placeholder-text {
+    max-width: calc(100% - 6.25rem);
+    padding: 0.35rem 0.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* ---------- Case study block ---------- */
+
+.case-study {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--ink);
+}
+
+.case-nav {
+  margin-bottom: 2rem;
+}
+.case-nav-label {
+  margin: 0 0 0.6rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.case-nav ul {
+  display: flex;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  padding: 0 0 0.5rem;
+  list-style: none;
+  overflow-x: auto; /* narrow screens: a scrollable row */
+}
+.case-nav a {
+  display: block;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.case-nav a:hover,
+.case-nav a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+.case-nav a[aria-current='location'] {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+@media (min-width: 860px) {
+  .case-study {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+  .case-nav {
+    position: sticky;
+    top: 2rem;
+    margin: 0;
+  }
+  .case-nav ul {
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0;
+    overflow: visible;
+  }
+}
+
+.case-main {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.case-section {
+  padding-bottom: 2.5rem;
+  scroll-margin-top: 1.5rem;
+}
+.case-section + .case-section {
+  padding-top: 2rem;
+  border-top: 1px solid var(--ink);
+}
+.case-section:last-child {
+  padding-bottom: 0;
+}
+.case-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.case-section h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.9rem, 4.5vw, 2.5rem);
+}
+.case-section p {
+  margin: 0 0 1.25rem;
+}
+.highlights-label {
+  margin: 0 0 0.6rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.highlights {
+  margin-bottom: 1.75rem;
+}
+
+/* Optional image or video inside a case study section */
+.inline-media {
+  margin: 1.5rem 0;
+}
+.inline-media img,
+.inline-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+}
+.inline-media figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+/* ---------- Previous / next ---------- */
+
+.sub-footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.75rem 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ink);
+  font-size: 0.9rem;
+}
+.sub-footer .next {
+  justify-self: end;
+}
+
+/* Smooth anchor scrolling for the sidebar, unless the visitor opts out */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* ---------- Reduced motion ---------- */
