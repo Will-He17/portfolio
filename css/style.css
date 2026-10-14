@@ -80,7 +80,7 @@ button:focus-visible {
   z-index: 0;
   font-family: var(--font-mono);
   font-size: 11px;
-  line-height: 1.9;
+  line-height: 21px;
   letter-spacing: 0.12em;
   color: var(--ink);
   white-space: nowrap;
@@ -93,16 +93,21 @@ button:focus-visible {
   text-align: right;
 }
 
+/* Scrolled by js/scramble.js with a transform (cheap, no layout) */
+.cipher-track {
+  will-change: transform;
+}
+
 .cipher-row {
   display: block;
-  height: 1.9em;
+  height: 21px; /* keep in sync with ROW_HEIGHT in js/scramble.js */
 }
 
 .cipher-group {
   display: inline-block;
   margin-right: 0.9em;
   opacity: 0.3;
-  transition: opacity 1.2s ease;
+  transition: opacity 0.5s ease;
 }
 .cipher--right .cipher-group {
   margin-right: 0;
